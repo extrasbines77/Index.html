@@ -92,7 +92,6 @@
         .lock-card button:active { transform: scale(0.97); }
         .lock-card button:disabled { opacity: 0.6; cursor: not-allowed; }
         .error-msg { color: #ff6666; margin-top: 15px; font-size: 0.85rem; }
-        .lock-timer { color: #ffaa00; margin-top: 10px; font-size: 0.75rem; }
         .main-content { display: none; }
 
         .header {
@@ -484,13 +483,13 @@
 
         <div id="extrapolar-tab" class="tab-pane">
             <div class="panel">
-                <div style="font-size:1.2rem; font-weight:bold; margin-bottom:12px;">🧠 MÉTODOS DE EXTRAPOLACIÓN</div>
-                <div class="result-card"><div style="font-weight:bold;">🔓 ACTIVACIÓN</div><div class="input-group"><input type="text" id="activacionCard" placeholder="Tarjeta completa" value="4915110191768499" inputmode="numeric"><button class="btn btn-primary" onclick="metodoActivacion()">GENERAR</button></div><div id="activacionResultado" class="result-number"></div></div>
-                <div class="result-card"><div style="font-weight:bold;">🔁 SIMILITUD</div><div class="input-group"><input type="text" id="simCard1" placeholder="Tarjeta 1" value="4915110191768499"><input type="text" id="simCard2" placeholder="Tarjeta 2" value="4915110176928790"><button class="btn btn-primary" onclick="metodoSimilitud()">GENERAR</button></div><div id="similitudResultado" class="result-number"></div></div>
-                <div class="result-card"><div style="font-weight:bold;">⚙️ AVANZADO</div><div class="input-group"><input type="text" id="avzCard1" placeholder="Tarjeta 1" value="5367776432370154"><input type="text" id="avzCard2" placeholder="Tarjeta 2" value="5367776471346768"><button class="btn btn-warning" onclick="metodoAvanzado()">GENERAR</button></div><div id="avanzadoResultado" class="result-number"></div></div>
-                <div class="result-card"><div style="font-weight:bold;">🔢 MÉTODO 2-2-2-2</div><div class="input-group"><input type="text" id="metodo2222Card" placeholder="Tarjeta base" value="4915110191768499"><button class="btn btn-info" onclick="metodo2222()">GENERAR</button></div><div id="metodo2222Resultado" class="result-number"></div></div>
-                <div class="result-card"><div style="font-weight:bold;">📈 EXTRAPOLACIÓN SECUENCIAL</div><div class="input-group"><input type="text" id="seqCard" placeholder="Tarjeta base" value="4915110191768499"><button class="btn btn-success" onclick="metodoSecuencial()">GENERAR</button></div><div id="secuencialResultado" class="result-number"></div></div>
-                <div class="result-card"><div style="font-weight:bold;">🔄 REVIVIR BIN</div><div class="input-group"><input type="text" id="revivirBin" placeholder="BIN (6 dígitos)" value="491511"><button class="btn btn-danger" onclick="revivirBINMejorado()">REVIVIR</button></div><div id="revivirResultado" class="result-number"></div></div>
+                <div style="font-size:1.2rem; font-weight:bold; margin-bottom:12px;">🧠 MÉTODOS DE EXTRAPOLACIÓN AVANZADOS</div>
+                <div class="result-card"><div style="font-weight:bold;">🔓 ACTIVACIÓN</div><div class="input-group"><input type="text" id="activacionCard" placeholder="Tarjeta completa" value="4915110191768499" inputmode="numeric"><button class="btn btn-primary" onclick="metodoActivacion()">GENERAR</button></div><div id="activacionResultado" class="result-number"></div><div class="info-box">📌 Borra los últimos 6 dígitos y los reemplaza por X</div></div>
+                <div class="result-card"><div style="font-weight:bold;">🔁 SIMILITUD</div><div class="input-group"><input type="text" id="simCard1" placeholder="Tarjeta 1" value="4915110191768499"><input type="text" id="simCard2" placeholder="Tarjeta 2" value="4915110176928790"><button class="btn btn-primary" onclick="metodoSimilitud()">GENERAR</button></div><div id="similitudResultado" class="result-number"></div><div class="info-box">📌 Compara dos tarjetas del mismo BIN y pone X donde no coinciden</div></div>
+                <div class="result-card"><div style="font-weight:bold;">⚙️ AVANZADO MATEMÁTICO</div><div class="input-group"><input type="text" id="avzCard1" placeholder="Tarjeta 1" value="5367776432370154"><input type="text" id="avzCard2" placeholder="Tarjeta 2" value="5367776471346768"><button class="btn btn-warning" onclick="metodoAvanzado()">GENERAR</button></div><div id="avanzadoResultado" class="result-number"></div><div class="info-box">📌 Algoritmo de suma y multiplicación para generar nueva tarjeta</div></div>
+                <div class="result-card"><div style="font-weight:bold;">🔢 MÉTODO 2-2-2-2</div><div class="input-group"><input type="text" id="metodo2222Card" placeholder="Tarjeta base" value="4915110191768499"><button class="btn btn-info" onclick="metodo2222()">GENERAR</button></div><div id="metodo2222Resultado" class="result-number"></div><div class="info-box">📌 Divide en grupos 2-2-2-2, pone X a la derecha de los últimos 4 grupos</div></div>
+                <div class="result-card"><div style="font-weight:bold;">📈 EXTRAPOLACIÓN SECUENCIAL</div><div class="input-group"><input type="text" id="seqCard" placeholder="Tarjeta base" value="4915110191768499"><button class="btn btn-success" onclick="metodoSecuencial()">GENERAR SERIE</button></div><div id="secuencialResultado" class="result-number"></div><div class="info-box">📌 Genera 10 variaciones alterando los últimos dígitos progresivamente</div></div>
+                <div class="result-card"><div style="font-weight:bold;">🔄 REVIVIR BIN COMPLETO (MEJORADO)</div><div class="input-group"><input type="text" id="revivirBin" placeholder="BIN (6 dígitos)" value="491511"><button class="btn btn-danger" onclick="revivirBINMejorado()">REVIVIR +50</button></div><div id="revivirResultado" class="result-number"></div><div class="info-box">📌 Genera 50+ combinaciones inteligentes para revivir BINs caídos</div></div>
             </div>
         </div>
 
@@ -499,7 +498,7 @@
 </div>
 
 <script>
-// ==================== CLAVE REMOTA - SIN SESIÓN PERMANENTE ====================
+// ==================== CLAVE REMOTA ====================
 const URL_CLAVE_REMOTA = "https://gist.githubusercontent.com/extrasbines77/a1fbd60e6b012aea20258ad93be7a7cf/raw/5abf283da61ef2f1e4b558e4fec22965c8ffd928/clave.txt";
 
 let intentosFallidos = 0;
@@ -525,7 +524,6 @@ async function verificarClaveRemota() {
             claveRemota = claveRemota.trim();
             
             if (claveIngresada === claveRemota) {
-                // Acceso exitoso - mostramos la app
                 document.getElementById('lockScreen').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
                 inicializarApp();
@@ -552,7 +550,6 @@ async function verificarClaveRemota() {
     }
 }
 
-// Permitir Enter en el campo de clave
 document.getElementById('accessKey')?.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') verificarClaveRemota();
 });
@@ -1049,61 +1046,125 @@ function toggleTema(){
     }
 }
 
-// Métodos de extrapolación
-function metodoActivacion(){
-    let card = document.getElementById('activacionCard').value.replace(/\D/g,'');
-    if(card.length<16){ mostrarToast('16 dígitos'); return; }
-    let res = card.slice(0,10) + 'XXXXXX';
-    document.getElementById('activacionResultado').innerHTML = `<span class="badge badge-100">${res}</span> <button onclick="copiarTexto('${res}')">Copiar</button>`;
+// ==================== MÉTODOS DE EXTRAPOLACIÓN MEJORADOS ====================
+
+function metodoActivacion() {
+    let card = document.getElementById('activacionCard').value.replace(/\D/g, '');
+    if (card.length < 16) { mostrarToast('❌ Tarjeta debe tener 16 dígitos'); return; }
+    let bin = card.slice(0, 6);
+    let middle = card.slice(6, 10);
+    let resultado = bin + middle + 'XXXXXX';
+    document.getElementById('activacionResultado').innerHTML = `<span class="badge badge-100">✅ ${resultado}</span> <button class="btn btn-secondary" style="margin-left:8px;" onclick="copiarTexto('${resultado}')">Copiar</button>`;
 }
-function metodoSimilitud(){
-    let c1 = document.getElementById('simCard1').value.replace(/\D/g,'');
-    let c2 = document.getElementById('simCard2').value.replace(/\D/g,'');
-    if(c1.length<16||c2.length<16){ mostrarToast('16 dígitos'); return; }
-    if(c1.slice(0,6)!==c2.slice(0,6)){ mostrarToast('Mismo BIN'); return; }
-    let resto = '';
-    for(let i=6;i<16;i++) resto += (c1[i]===c2[i]?c1[i]:'X');
-    let res = c1.slice(0,6)+resto;
-    document.getElementById('similitudResultado').innerHTML = `<span class="badge badge-100">${res}</span> <button onclick="copiarTexto('${res}')">Copiar</button>`;
+
+function metodoSimilitud() {
+    let card1 = document.getElementById('simCard1').value.replace(/\D/g, '');
+    let card2 = document.getElementById('simCard2').value.replace(/\D/g, '');
+    if (card1.length < 16 || card2.length < 16) { mostrarToast('❌ Ambas tarjetas deben tener 16 dígitos'); return; }
+    let bin1 = card1.slice(0, 6);
+    let bin2 = card2.slice(0, 6);
+    if (bin1 !== bin2) { mostrarToast('⚠️ Los BINs no coinciden'); return; }
+    let resto1 = card1.slice(6);
+    let resto2 = card2.slice(6);
+    let resultadoResto = '';
+    for (let i = 0; i < resto1.length; i++) {
+        resultadoResto += (resto1[i] === resto2[i]) ? resto1[i] : 'X';
+    }
+    let resultadoFinal = bin1 + resultadoResto;
+    document.getElementById('similitudResultado').innerHTML = `<span class="badge badge-100">🔁 ${resultadoFinal}</span> <button class="btn btn-secondary" style="margin-left:8px;" onclick="copiarTexto('${resultadoFinal}')">Copiar</button>`;
 }
-function metodoAvanzado(){
-    let t1 = document.getElementById('avzCard1').value.replace(/\D/g,'');
-    let t2 = document.getElementById('avzCard2').value.replace(/\D/g,'');
-    if(t1.length<16||t2.length<16){ mostrarToast('16 dígitos'); return; }
-    let a1=parseInt(t1[6])||0, a2=parseInt(t2[6])||0, b1=parseInt(t1[7])||0, b2=parseInt(t2[7])||0;
-    let suma = Math.floor((a1+a2+b1+b2)/2);
-    let res = t1.slice(0,8) + suma.toString().slice(-2) + 'XXXXXX';
-    document.getElementById('avanzadoResultado').innerHTML = `<span class="badge badge-100">${res}</span> <button onclick="copiarTexto('${res}')">Copiar</button>`;
+
+function metodoAvanzado() {
+    let t1 = document.getElementById('avzCard1').value.replace(/\D/g, '');
+    let t2 = document.getElementById('avzCard2').value.replace(/\D/g, '');
+    if (t1.length < 16 || t2.length < 16) { mostrarToast('❌ Ambas tarjetas deben tener 16 dígitos'); return; }
+    let bin = t1.slice(0, 6);
+    let suma = 0;
+    for(let i = 6; i < 10; i++) {
+        suma += (parseInt(t1[i]) || 0) + (parseInt(t2[i]) || 0);
+    }
+    let promedio = Math.floor(suma / 4);
+    let resultado = bin + t1.slice(6, 8) + (promedio % 10).toString() + (Math.floor(promedio / 10) % 10).toString() + 'XXXXXX';
+    document.getElementById('avanzadoResultado').innerHTML = `<span class="badge badge-100">⚙️ ${resultado}</span> <button class="btn btn-secondary" style="margin-left:8px;" onclick="copiarTexto('${resultado}')">Copiar</button>`;
 }
-function metodo2222(){
-    let card = document.getElementById('metodo2222Card').value.replace(/\D/g,'');
-    if(card.length<16){ mostrarToast('16 dígitos'); return; }
-    let partes = [];
-    for(let i=0;i<16;i+=2) partes.push(card.substr(i,2));
-    let resPartes = partes.map((p,i)=> i<4 ? p : p[0]+'X');
-    let res = resPartes.join('');
-    document.getElementById('metodo2222Resultado').innerHTML = `<span class="badge badge-100">${res}</span> <button onclick="copiarTexto('${res}')">Copiar</button>`;
+
+function metodo2222() {
+    let card = document.getElementById('metodo2222Card').value.replace(/\D/g, '');
+    if (card.length < 16) { mostrarToast('❌ Tarjeta debe tener 16 dígitos'); return; }
+    let bin = card.slice(0, 6);
+    let grupos = [];
+    for (let i = 6; i < card.length; i += 2) {
+        grupos.push(card.substr(i, 2));
+    }
+    let resultadoGrupos = [];
+    for (let i = 0; i < grupos.length; i++) {
+        if (i >= 2) {
+            resultadoGrupos.push(grupos[i][0] + 'X');
+        } else {
+            resultadoGrupos.push(grupos[i]);
+        }
+    }
+    let resultado = bin + resultadoGrupos.join('');
+    document.getElementById('metodo2222Resultado').innerHTML = `<span class="badge badge-100">🔢 ${resultado}</span> <button class="btn btn-secondary" style="margin-left:8px;" onclick="copiarTexto('${resultado}')">Copiar</button>`;
 }
-function metodoSecuencial(){
-    let card = document.getElementById('seqCard').value.replace(/\D/g,'');
-    if(card.length<16){ mostrarToast('16 dígitos'); return; }
-    let bin = card.slice(0,6);
+
+function metodoSecuencial() {
+    let card = document.getElementById('seqCard').value.replace(/\D/g, '');
+    if (card.length < 16) { mostrarToast('❌ Tarjeta debe tener 16 dígitos'); return; }
+    let bin = card.slice(0, 6);
     let base = card.slice(6);
     let resultados = [];
-    for(let i=4;i<=12;i++) resultados.push(bin + base.slice(0, -i) + 'X'.repeat(i));
-    let html = resultados.map(r=>`<div>📈 ${r} <button onclick="copiarTexto('${r}')">Copiar</button></div>`).join('');
+    for (let i = 1; i <= 12; i++) {
+        let xCount = Math.min(i, 10);
+        resultados.push(bin + base.slice(0, 10 - Math.floor(i/2)) + 'X'.repeat(xCount));
+    }
+    let html = resultados.map(r => `<div class="result-number" style="margin:4px 0;">📈 ${r} <button class="btn btn-secondary" style="margin-left:6px;" onclick="copiarTexto('${r}')">Copiar</button></div>`).join('');
     document.getElementById('secuencialResultado').innerHTML = html;
 }
-function revivirBINMejorado(){
-    let bin = document.getElementById('revivirBin').value.replace(/\D/g,'').slice(0,6);
-    if(bin.length!==6){ mostrarToast('BIN 6 dígitos'); return; }
+
+function revivirBINMejorado() {
+    let bin = document.getElementById('revivirBin').value.replace(/\D/g, '').slice(0, 6);
+    if (bin.length !== 6) { mostrarToast('❌ Ingresa un BIN válido de 6 dígitos'); return; }
+    
     let resultados = [];
-    for(let i=1;i<=15;i++) resultados.push(bin + (i<10?'0'+i:i) + 'XXXXXXXXXX');
-    for(let p of ['1111','2222','3333','4444','5555','6666','7777','8888','9999','0000']) resultados.push(bin + p + 'XXXXXX');
-    let html = `<div style="max-height:250px; overflow:auto;">${resultados.map(r=>`<div>🔄 ${r} <button onclick="copiarTexto('${r}')">Copiar</button></div>`).join('')}</div><div class="info-box">${resultados.length} combinaciones</div>`;
+    
+    // Patrones de meses y años
+    let meses = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    let años = ['24', '25', '26', '27', '28', '29', '30'];
+    
+    // Combinación de mes + año
+    for(let mes of meses) {
+        for(let año of años.slice(0,3)) {
+            resultados.push(bin + mes + año + 'XXXXXXXX');
+        }
+    }
+    
+    // Patrones comunes
+    let patrones = ['1234', '4321', '0000', '1111', '2222', '3333', '4444', '5555', '6666', '7777', '8888', '9999'];
+    for(let patron of patrones) {
+        resultados.push(bin + patron + 'XXXXXX');
+        resultados.push(bin + patron.slice(0,2) + 'XX' + patron.slice(2,4) + 'XX');
+    }
+    
+    // Patrones secuenciales
+    for(let i = 1; i <= 25; i++) {
+        let num = i.toString().padStart(2, '0');
+        resultados.push(bin + num + num + 'XXXXXX');
+        resultados.push(bin + num + 'XX' + num + 'XXXX');
+    }
+    
+    // Eliminar duplicados y limitar
+    resultados = [...new Set(resultados)].slice(0, 60);
+    
+    let html = `<div style="max-height:300px; overflow-y:auto;">`;
+    html += resultados.map(r => `<div class="result-number" style="margin:4px 0;">🔄 ${r} <button class="btn btn-secondary" style="margin-left:6px;" onclick="copiarTexto('${r}')">Copiar</button></div>`).join('');
+    html += `</div><div class="info-box" style="margin-top:8px;">📌 ${resultados.length} combinaciones inteligentes para revivir ${bin}</div>`;
+    
     document.getElementById('revivirResultado').innerHTML = html;
-    mostrarToast(`✅ ${resultados.length} combinaciones`);
+    mostrarToast(`✅ ${resultados.length} combinaciones generadas para revivir ${bin}`);
 }
+
+// ==================== FIN MÉTODOS DE EXTRAPOLACIÓN ====================
 
 function cargarConfiguracionesIniciales(){
     try {
@@ -1118,7 +1179,6 @@ function cargarConfiguracionesIniciales(){
         let ultCount = localStorage.getItem('ext_ultimoCount'); if(ultCount) document.getElementById('extrasCount').value = ultCount;
         let ultLen = localStorage.getItem('ext_ultimoLength'); if(ultLen) document.getElementById('cardLength').value = ultLen;
     } catch(e) {
-        // Si hay error, limpiar todo para evitar bloqueos
         localStorage.clear();
     }
     mostrarStatsBIN();
