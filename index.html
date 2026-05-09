@@ -311,7 +311,7 @@
 <div id="lockScreen" class="lock-screen">
     <div class="lock-card">
         <h2>🔐 ACCESO RESTRINGIDO</h2>
-        <p>Ingrese la clave de acceso<br><span style="font-size:0.7rem;">🔒 Verificación remota</span></p>
+        <p>Ingrese la clave de acceso<br><span style="font-size:0.7rem;">🔒 Verificación remota segura</span></p>
         <input type="password" id="accessKey" placeholder="Clave" autocomplete="off" inputmode="text">
         <br>
         <button onclick="verificarClaveRemota()">🔓 ACCEDER</button>
@@ -365,7 +365,7 @@
                 <button class="btn btn-success" onclick="importarConfiguracion()">📂 RESTAURAR</button>
             </div>
             <div id="binValidation" class="info-box" style="background:rgba(255,100,0,0.2); display:none;"></div>
-            <div class="info-box">💚 EXTRAS 100%+ VERDE = MÁXIMA PROBABILIDAD | 🦉 BINs exclusivos</div>
+            <div class="info-box">💚 EXTRAS 100%+ VERDE = MÁXIMA PROBABILIDAD | 🧠 EXTRAPOLACIÓN INTELIGENTE</div>
         </div>
 
         <div class="tabs">
@@ -483,13 +483,13 @@
 
         <div id="extrapolar-tab" class="tab-pane">
             <div class="panel">
-                <div style="font-size:1.2rem; font-weight:bold; margin-bottom:12px;">🧠 MÉTODOS DE EXTRAPOLACIÓN AVANZADOS</div>
+                <div style="font-size:1.2rem; font-weight:bold; margin-bottom:12px;">🧠 MÉTODOS DE EXTRAPOLACIÓN</div>
                 <div class="result-card"><div style="font-weight:bold;">🔓 ACTIVACIÓN</div><div class="input-group"><input type="text" id="activacionCard" placeholder="Tarjeta completa" value="4915110191768499" inputmode="numeric"><button class="btn btn-primary" onclick="metodoActivacion()">GENERAR</button></div><div id="activacionResultado" class="result-number"></div><div class="info-box">📌 Borra los últimos 6 dígitos y los reemplaza por X</div></div>
-                <div class="result-card"><div style="font-weight:bold;">🔁 SIMILITUD</div><div class="input-group"><input type="text" id="simCard1" placeholder="Tarjeta 1" value="4915110191768499"><input type="text" id="simCard2" placeholder="Tarjeta 2" value="4915110176928790"><button class="btn btn-primary" onclick="metodoSimilitud()">GENERAR</button></div><div id="similitudResultado" class="result-number"></div><div class="info-box">📌 Compara dos tarjetas del mismo BIN y pone X donde no coinciden</div></div>
+                <div class="result-card"><div style="font-weight:bold;">🔁 SIMILITUD</div><div class="input-group"><input type="text" id="simCard1" placeholder="Tarjeta 1" value="4915110191768499"><input type="text" id="simCard2" placeholder="Tarjeta 2" value="4915110176928790"><button class="btn btn-primary" onclick="metodoSimilitud()">GENERAR</button></div><div id="similitudResultado" class="result-number"></div><div class="info-box">📌 Compara dos tarjetas del mismo BIN, pone X donde no coinciden</div></div>
                 <div class="result-card"><div style="font-weight:bold;">⚙️ AVANZADO MATEMÁTICO</div><div class="input-group"><input type="text" id="avzCard1" placeholder="Tarjeta 1" value="5367776432370154"><input type="text" id="avzCard2" placeholder="Tarjeta 2" value="5367776471346768"><button class="btn btn-warning" onclick="metodoAvanzado()">GENERAR</button></div><div id="avanzadoResultado" class="result-number"></div><div class="info-box">📌 Algoritmo de suma y multiplicación para generar nueva tarjeta</div></div>
-                <div class="result-card"><div style="font-weight:bold;">🔢 MÉTODO 2-2-2-2</div><div class="input-group"><input type="text" id="metodo2222Card" placeholder="Tarjeta base" value="4915110191768499"><button class="btn btn-info" onclick="metodo2222()">GENERAR</button></div><div id="metodo2222Resultado" class="result-number"></div><div class="info-box">📌 Divide en grupos 2-2-2-2, pone X a la derecha de los últimos 4 grupos</div></div>
-                <div class="result-card"><div style="font-weight:bold;">📈 EXTRAPOLACIÓN SECUENCIAL</div><div class="input-group"><input type="text" id="seqCard" placeholder="Tarjeta base" value="4915110191768499"><button class="btn btn-success" onclick="metodoSecuencial()">GENERAR SERIE</button></div><div id="secuencialResultado" class="result-number"></div><div class="info-box">📌 Genera 10 variaciones alterando los últimos dígitos progresivamente</div></div>
-                <div class="result-card"><div style="font-weight:bold;">🔄 REVIVIR BIN COMPLETO (MEJORADO)</div><div class="input-group"><input type="text" id="revivirBin" placeholder="BIN (6 dígitos)" value="491511"><button class="btn btn-danger" onclick="revivirBINMejorado()">REVIVIR +50</button></div><div id="revivirResultado" class="result-number"></div><div class="info-box">📌 Genera 50+ combinaciones inteligentes para revivir BINs caídos</div></div>
+                <div class="result-card"><div style="font-weight:bold;">🔢 MÉTODO 2-2-2-2</div><div class="input-group"><input type="text" id="metodo2222Card" placeholder="Tarjeta base" value="4915110191768499"><button class="btn btn-info" onclick="metodo2222()">GENERAR</button></div><div id="metodo2222Resultado" class="result-number"></div><div class="info-box">📌 Divide en grupos 2-2-2-2, pone X a la derecha de los últimos 2 grupos</div></div>
+                <div class="result-card"><div style="font-weight:bold;">📈 EXTRAPOLACIÓN SECUENCIAL</div><div class="input-group"><input type="text" id="seqCard" placeholder="Tarjeta base" value="4915110191768499"><button class="btn btn-success" onclick="metodoSecuencial()">GENERAR SERIE</button></div><div id="secuencialResultado" class="result-number"></div><div class="info-box">📌 Genera 12 variaciones alterando los últimos dígitos progresivamente</div></div>
+                <div class="result-card"><div style="font-weight:bold;">🔄 REVIVIR BIN COMPLETO</div><div class="input-group"><input type="text" id="revivirBin" placeholder="BIN (6 dígitos)" value="491511"><button class="btn btn-danger" onclick="revivirBINMejorado()">REVIVIR +60</button></div><div id="revivirResultado" class="result-number"></div><div class="info-box">📌 Genera 60+ combinaciones inteligentes para revivir BINs caídos</div></div>
             </div>
         </div>
 
@@ -498,7 +498,7 @@
 </div>
 
 <script>
-// ==================== CLAVE REMOTA ====================
+// ==================== CLAVE REMOTA (PIN OCULTO - NUNCA VISIBLE) ====================
 const URL_CLAVE_REMOTA = "https://gist.githubusercontent.com/extrasbines77/a1fbd60e6b012aea20258ad93be7a7cf/raw/5abf283da61ef2f1e4b558e4fec22965c8ffd928/clave.txt";
 
 let intentosFallidos = 0;
@@ -1163,8 +1163,6 @@ function revivirBINMejorado() {
     document.getElementById('revivirResultado').innerHTML = html;
     mostrarToast(`✅ ${resultados.length} combinaciones generadas para revivir ${bin}`);
 }
-
-// ==================== FIN MÉTODOS DE EXTRAPOLACIÓN ====================
 
 function cargarConfiguracionesIniciales(){
     try {
