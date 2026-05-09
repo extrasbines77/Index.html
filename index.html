@@ -62,7 +62,7 @@
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .lock-card h2 { font-size: 1.6rem; color: #ffd700; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .lock-card h2 { font-size: 1.6rem; color: #ffd700; margin-bottom: 15px; }
         .lock-card p { color: #bbccff; margin-bottom: 25px; font-size: 0.9rem; }
         .lock-card input {
             background: #010a1a;
@@ -270,10 +270,9 @@
             z-index: 10001;
             opacity: 0;
             animation: fadeToasts 0.8s ease-out forwards;
-            white-space: nowrap;
             max-width: 90vw;
-            white-space: normal;
             text-align: center;
+            white-space: normal;
         }
         @keyframes fadeToasts {
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
@@ -313,12 +312,11 @@
 <div id="lockScreen" class="lock-screen">
     <div class="lock-card">
         <h2>🔐 ACCESO RESTRINGIDO</h2>
-        <p>Ingrese la clave de acceso<br><span style="font-size:0.7rem;">🔒 Verificación remota segura</span></p>
+        <p>Ingrese la clave de acceso<br><span style="font-size:0.7rem;">🔒 Verificación remota</span></p>
         <input type="password" id="accessKey" placeholder="Clave" autocomplete="off" inputmode="text">
         <br>
         <button onclick="verificarClaveRemota()">🔓 ACCEDER</button>
         <div id="lockError" class="error-msg"></div>
-        <div id="lockTimer" class="lock-timer"></div>
     </div>
 </div>
 
@@ -501,72 +499,24 @@
 </div>
 
 <script>
-// ==================== CLAVE REMOTA CON TU URL ====================
+// ==================== CLAVE REMOTA - SIN SESIÓN PERMANENTE ====================
 const URL_CLAVE_REMOTA = "https://gist.githubusercontent.com/extrasbines77/a1fbd60e6b012aea20258ad93be7a7cf/raw/5abf283da61ef2f1e4b558e4fec22965c8ffd928/clave.txt";
 
-const SESION_DURACION_HORAS = 24;
 let intentosFallidos = 0;
-let bloqueoHasta = 0;
 
-function cargarEstadoBloqueo() {
-    try {
-        intentosFallidos = parseInt(localStorage.getItem('ext_intentos') || '0');
-        bloqueoHasta = parseInt(localStorage.getItem('ext_bloqueo') || '0');
-    } catch(e) { intentosFallidos = 0; bloqueoHasta = 0; }
-}
-
-function guardarEstadoBloqueo() {
-    try {
-        localStorage.setItem('ext_intentos', intentosFallidos.toString());
-        localStorage.setItem('ext_bloqueo', bloqueoHasta.toString());
-    } catch(e) {}
-}
-
-function verificarBloqueoActual() {
-    if (bloqueoHasta > Date.now()) {
-        let restante = Math.ceil((bloqueoHasta - Date.now()) / 1000);
-        let horas = Math.floor(restante / 3600);
-        let minutos = Math.floor((restante % 3600) / 60);
-        let segundos = restante % 60;
-        let errorDiv = document.getElementById('lockError');
-        if(errorDiv) errorDiv.innerHTML = `🔒 DEMASIADOS INTENTOS<br>⏱️ Bloqueado: ${horas}h ${minutos}m ${segundos}s`;
-        let btn = document.querySelector('.lock-card button');
-        let input = document.getElementById('accessKey');
-        if(btn) btn.disabled = true;
-        if(input) input.disabled = true;
-        setTimeout(() => verificarBloqueoActual(), 1000);
-        return true;
-    }
-    return false;
-}
-
-function verificarSesionActivaLocal() {
-    try {
-        let ultimoAcceso = localStorage.getItem('ext_ultimoAcceso');
-        let sesionActiva = localStorage.getItem('ext_sesionActiva');
-        if (sesionActiva === 'true' && ultimoAcceso) {
-            let tiempoTranscurrido = Date.now() - parseInt(ultimoAcceso);
-            let horasTranscurridas = tiempoTranscurrido / (1000 * 60 * 60);
-            if (horasTranscurridas < SESION_DURACION_HORAS) {
-                return true;
-            } else {
-                localStorage.removeItem('ext_sesionActiva');
-                localStorage.removeItem('ext_ultimoAcceso');
-            }
-        }
-    } catch(e) {}
-    return false;
+function mostrarError(mensaje) {
+    let errorDiv = document.getElementById('lockError');
+    if(errorDiv) errorDiv.innerHTML = mensaje;
 }
 
 async function verificarClaveRemota() {
-    if (verificarBloqueoActual()) return;
-    
     let claveIngresada = document.getElementById('accessKey').value;
     let btn = document.querySelector('.lock-card button');
     let originalText = btn.innerHTML;
     
     btn.innerHTML = '<span class="spinner"></span> VERIFICANDO...';
     btn.disabled = true;
+    mostrarError('');
     
     try {
         let resp = await fetch(URL_CLAVE_REMOTA, { cache: 'no-store' });
@@ -575,52 +525,41 @@ async function verificarClaveRemota() {
             claveRemota = claveRemota.trim();
             
             if (claveIngresada === claveRemota) {
-                intentosFallidos = 0;
-                bloqueoHasta = 0;
-                guardarEstadoBloqueo();
-                localStorage.setItem('ext_sesionActiva', 'true');
-                localStorage.setItem('ext_ultimoAcceso', Date.now().toString());
+                // Acceso exitoso - mostramos la app
                 document.getElementById('lockScreen').style.display = 'none';
                 document.getElementById('mainContent').style.display = 'block';
                 inicializarApp();
+                return;
             } else {
                 intentosFallidos++;
-                guardarEstadoBloqueo();
-                if (intentosFallidos >= 4) {
-                    bloqueoHasta = Date.now() + 86400000;
-                    guardarEstadoBloqueo();
-                    document.getElementById('lockError').innerHTML = '🔒 ACCESO BLOQUEADO POR 24 HORAS';
-                    verificarBloqueoActual();
+                let restantes = 4 - intentosFallidos;
+                if (restantes <= 0) {
+                    mostrarError('🔒 DEMASIADOS INTENTOS. Recarga la página para reintentar.');
+                    btn.disabled = true;
                 } else {
-                    let restantes = 4 - intentosFallidos;
-                    document.getElementById('lockError').innerHTML = `❌ CLAVE INCORRECTA<br>⚠️ Te quedan ${restantes} intento${restantes !== 1 ? 's' : ''}`;
+                    mostrarError(`❌ CLAVE INCORRECTA<br>⚠️ Te quedan ${restantes} intento${restantes !== 1 ? 's' : ''}`);
                 }
-                document.getElementById('accessKey').value = '';
             }
         } else {
-            document.getElementById('lockError').innerHTML = '❌ ERROR DE CONEXIÓN<br>No se pudo verificar la clave';
+            mostrarError('❌ ERROR DE CONEXIÓN<br>No se pudo verificar la clave');
         }
     } catch(error) {
-        document.getElementById('lockError').innerHTML = '❌ ERROR DE RED<br>Verifica tu conexión a internet';
+        mostrarError('❌ ERROR DE RED<br>Verifica tu conexión a internet');
     } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
+        document.getElementById('accessKey').value = '';
     }
 }
 
-cargarEstadoBloqueo();
-if (!verificarBloqueoActual() && verificarSesionActivaLocal()) {
-    document.getElementById('lockScreen').style.display = 'none';
-    document.getElementById('mainContent').style.display = 'block';
-    inicializarApp();
-} else {
-    verificarBloqueoActual();
-}
+// Permitir Enter en el campo de clave
+document.getElementById('accessKey')?.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') verificarClaveRemota();
+});
 
 // ==================== CÓDIGO PRINCIPAL DE LA APP ====================
 let todo100 = [], favoritos = [], tarjetasActuales = [], seleccionadas = new Set(), filtroActual = 'all', tiempoInicio = 0;
 let historialBINs = [], importedBINs = [], binsScrapeados = [], statsBIN = {};
-let binValidationCache = {};
 
 const LUIS_BINS = ["414718", "526557", "426807", "416916", "421316", "441103", "414740", "420767", "483316", "434769", "527515", "481582", "461046", "436618"];
 
@@ -724,9 +663,9 @@ function actualizarFavoritos(){
 
 function agregarATodo100(card){ if(card && !card.includes('X') && validarLuhn(card) && !todo100.includes(card)){ todo100.unshift(card); if(todo100.length>500) todo100.pop(); guardarTodo100(); actualizarStatsBIN(card.slice(0,6)); } }
 function agregarFavorito(card){ if(!favoritos.includes(card)){ favoritos.unshift(card); guardarFavoritos(); mostrarToast('⭐ Guardado'); } }
-function eliminarFavorito(card){ favoritos = favoritos.filter(f=>f!==card); guardarFavoritos(); }
-function limpiarFavoritos(){ favoritos=[]; guardarFavoritos(); }
-function limpiarTodo100(){ todo100=[]; guardarTodo100(); }
+function eliminarFavorito(card){ favoritos = favoritos.filter(f=>f!==card); guardarFavoritos(); actualizarFavoritos(); }
+function limpiarFavoritos(){ favoritos=[]; guardarFavoritos(); actualizarFavoritos(); }
+function limpiarTodo100(){ todo100=[]; guardarTodo100(); actualizarTodo100(); }
 
 function actualizarStatsBIN(bin){
     if(!statsBIN[bin]) statsBIN[bin]=0;
@@ -975,12 +914,12 @@ async function scrapearBINs(){
     for(let b of bins){
         try{
             let r = await fetch(`https://lookup.binlist.net/${b}`);
-            if(r.ok){ let d = await r.json(); res.push({bin:b}); }
+            if(r.ok){ await r.json(); res.push({bin:b}); }
             else res.push({bin:b});
         }catch(e){ res.push({bin:b}); }
     }
     binsScrapeados = res;
-    localStorage.setItem('ext_binsScrapeados', JSON.stringify(binsScrapeados));
+    try { localStorage.setItem('ext_binsScrapeados', JSON.stringify(binsScrapeados)); } catch(e) {}
     mostrarBINsScrapeados();
     mostrarToast('✅ Scraping completado');
 }
@@ -993,12 +932,12 @@ async function scrapearDesdeAPI(){
     for(let b of bins){
         try{
             let r = await fetch(`https://lookup.binlist.net/${b}`);
-            if(r.ok){ let d = await r.json(); res.push({bin:b}); }
+            if(r.ok){ await r.json(); res.push({bin:b}); }
             else res.push({bin:b});
         }catch(e){ res.push({bin:b}); }
     }
     binsScrapeados = res;
-    localStorage.setItem('ext_binsScrapeados', JSON.stringify(binsScrapeados));
+    try { localStorage.setItem('ext_binsScrapeados', JSON.stringify(binsScrapeados)); } catch(e) {}
     mostrarBINsScrapeados();
     mostrarToast('✅ API consultada');
 }
@@ -1071,9 +1010,11 @@ function limpiarHistorial(){ historialBINs=[]; guardarHistorial(); actualizarHis
 
 function guardarConfig(){
     let bin = document.getElementById('binInput').value;
-    localStorage.setItem('ext_ultimoBin', bin);
-    localStorage.setItem('ext_ultimoCount', document.getElementById('extrasCount').value);
-    localStorage.setItem('ext_ultimoLength', document.getElementById('cardLength').value);
+    try {
+        localStorage.setItem('ext_ultimoBin', bin);
+        localStorage.setItem('ext_ultimoCount', document.getElementById('extrasCount').value);
+        localStorage.setItem('ext_ultimoLength', document.getElementById('cardLength').value);
+    } catch(e) {}
     if(bin && bin.length>=6 && !historialBINs.includes(bin)){
         historialBINs.unshift(bin);
         if(historialBINs.length>10) historialBINs.pop();
@@ -1085,9 +1026,11 @@ function guardarConfig(){
 function limpiarTodoCompleto(){
     if(confirm('⚠️ ¿Eliminar TODOS los datos?')){
         todo100=[]; favoritos=[]; historialBINs=[]; importedBINs=[]; binsScrapeados=[]; statsBIN={};
-        localStorage.removeItem('ext_todo100'); localStorage.removeItem('ext_favoritos');
-        localStorage.removeItem('ext_historial'); localStorage.removeItem('ext_imported');
-        localStorage.removeItem('ext_stats'); localStorage.removeItem('ext_binsScrapeados');
+        try {
+            localStorage.removeItem('ext_todo100'); localStorage.removeItem('ext_favoritos');
+            localStorage.removeItem('ext_historial'); localStorage.removeItem('ext_imported');
+            localStorage.removeItem('ext_stats'); localStorage.removeItem('ext_binsScrapeados');
+        } catch(e) {}
         actualizarTodo100(); actualizarFavoritos(); actualizarHistorial(); renderImportedBINs();
         mostrarBINsScrapeados(); mostrarStatsBIN();
         mostrarToast('🗑️ Todo limpiado');
@@ -1098,11 +1041,11 @@ function toggleTema(){
     if(document.body.classList.contains('dark')){
         document.body.classList.remove('dark');
         document.body.classList.add('light');
-        localStorage.setItem('ext_tema', 'light');
+        try { localStorage.setItem('ext_tema', 'light'); } catch(e) {}
     } else {
         document.body.classList.remove('light');
         document.body.classList.add('dark');
-        localStorage.setItem('ext_tema', 'dark');
+        try { localStorage.setItem('ext_tema', 'dark'); } catch(e) {}
     }
 }
 
@@ -1174,7 +1117,10 @@ function cargarConfiguracionesIniciales(){
         let ultBin = localStorage.getItem('ext_ultimoBin'); if(ultBin) document.getElementById('binInput').value = ultBin;
         let ultCount = localStorage.getItem('ext_ultimoCount'); if(ultCount) document.getElementById('extrasCount').value = ultCount;
         let ultLen = localStorage.getItem('ext_ultimoLength'); if(ultLen) document.getElementById('cardLength').value = ultLen;
-    } catch(e) {}
+    } catch(e) {
+        // Si hay error, limpiar todo para evitar bloqueos
+        localStorage.clear();
+    }
     mostrarStatsBIN();
 }
 
